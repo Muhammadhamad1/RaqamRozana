@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "910666785035",
+    "project_id": "expense-tracker-firebase-5aac6",
+    "storage_bucket": "expense-tracker-firebase-5aac6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:910666785035:android:c1dd326fdbdd989897c20e",
+        "android_client_info": {
+          "package_name": "com.example.etracker"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDEeOs8AZRFnkRDigzOQLZQQQKjMEhvgcI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
