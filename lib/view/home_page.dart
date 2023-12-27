@@ -332,11 +332,6 @@ class HomePageState extends State<HomePage> {
                   bool confirmed = await showConfirmationDialog(context);
                   if (confirmed) {
                     GoogleSheetsApi.clearSheet();
-                    setState(() {});
-                    CustomSnackBar.show(
-                      isError: false,
-                      message: 'All Data removed Successfully!',
-                    );
                     startLoading();
                   }
                 },
@@ -350,152 +345,105 @@ class HomePageState extends State<HomePage> {
                 ),
               ),
               Expanded(
-                  child: Container(
-                      child: Center(
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: MySize.size20,
-                    ),
-                    Expanded(
-                        child: GoogleSheetsApi.loading == true
-                            ? const LoadingData()
-                            : GoogleSheetsApi.currentTransactions.isEmpty
-                        ? Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SizedBox(height: MySize.size35,),
-
-                              Text(
-                                'Your expense history is currently empty. Begin documenting your spending.',
-                                style: TextStyle(fontSize: MySize.size20,color: Colors.grey.shade600),textAlign: TextAlign.center,
-                              ),
-                              Text(
-                                'Click here to add new expenses',
-                                style: TextStyle(fontSize: MySize.size20,color: Colors.grey.shade800,fontWeight: FontWeight.w300),textAlign: TextAlign.center,
-                              ),
-
-                            ],
-                          ),
-                        )
-                        : ListView.builder(
-                                itemCount:
-                                    GoogleSheetsApi.currentTransactions.length,
-                                itemBuilder: (context, index) {
-                                  return Column(
+                  child: Center(
+                                  child: Column(
                                     children: [
-                                      // Dismissible(
-                                      //   confirmDismiss: (direction) async {
-                                      //     return await showDialog(
-                                      //       context: context,
-                                      //       builder: (BuildContext context) {
-                                      //         return AlertDialog(
-                                      //           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(MySize.size15)),
-                                      //           elevation: 5,
-                                      //           backgroundColor: Colors.white,
-                                      //           surfaceTintColor: Colors.grey.shade100,
-                                      //           shadowColor: Colors.white,
-                                      //           title: const Text("D  E  L  E  T  E",style: TextStyle(fontWeight: FontWeight.w600),),
-                                      //           content: const Text("Are you sure you want to delete this Transaction?"),
-                                      //           actions: <Widget>[
-                                      //             TextButton(
-                                      //               style: ButtonStyle(
-                                      //                   shape: MaterialStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(MySize.size10))),
-                                      //                   backgroundColor: MaterialStatePropertyAll(Colors.grey.shade400)),
-                                      //               onPressed: () => Navigator.of(context).pop(false),
-                                      //               child: const Text("Cancel",style: TextStyle(color: Colors.black),),
-                                      //             ),
-                                      //             TextButton(
-                                      //               style: ButtonStyle(
-                                      //                   shape: MaterialStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(MySize.size10))),
-                                      //                   backgroundColor: MaterialStatePropertyAll(Colors.red.shade300)),
-                                      //               onPressed: () => Navigator.of(context).pop(true),
-                                      //               child: const Text("Delete",style: TextStyle(color: Colors.black),),
-                                      //             ),
-                                      //
-                                      //           ],
-                                      //         );
-                                      //       },
-                                      //     );
-                                      //   },
-                                      //   key: UniqueKey(),
-                                      //   onDismissed: (direction) {
-                                      //     setState(() {
-                                      //       GoogleSheetsApi.deleteTransaction(index + 1);
-                                      //       startLoading();
-                                      //     });
-                                      //     ScaffoldMessenger.of(context).removeCurrentSnackBar(); // Use ScaffoldMessenger
-                                      //
-                                      //   },
-                                      //   background: Container(decoration: BoxDecoration(
-                                      //     color: Colors.red.shade200,
-                                      //     borderRadius: BorderRadius.circular(MySize.size15),
-                                      //   ),
-                                      //   padding:EdgeInsets.all(MySize.size15),
-                                      //   child: const Row(
-                                      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      //     children: [
-                                      //       Icon(Icons.delete_forever_outlined),
-                                      //       Icon(Icons.delete_forever_outlined)
-                                      //     ],
-                                      //   ),),
-                                      //   child:
-                                      SlideAction(
-                                        onSubmit: () async {
-                                          return await showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return CustomAlert(index: index,onDismissedCallback: startLoading,);
-                                            },
-                                          );
-                                        },
-                                        submittedIcon: Icon(
-                                          Icons.delete_sweep_outlined,
-                                          color: Colors.red,
-                                          size: MySize.size35,
-                                        ),
-                                        reversed: false,
-                                        elevation: 1,
-                                        animationDuration: const Duration(milliseconds: 200),
-                                        sliderButtonIconPadding: MySize.size8,
-                                        sliderButtonYOffset: MySize.size8,
-                                        height: MySize.scaleFactorHeight * 65,
-                                        sliderRotate: true,
-                                        borderRadius: MySize.size20,
-                                        innerColor: Colors.grey.shade200,
-
-                                        outerColor: Colors.grey.shade100,
-
-                                        sliderButtonIcon: Icon(
-                                          Icons.attach_money_outlined,
-                                          color: GoogleSheetsApi
-                                                          .currentTransactions[
-                                                      index][2] ==
-                                                  'expense'
-                                              ? Colors.red
-                                              : Colors.green,
-                                        ),
-                                        sliderButtonIconSize: MySize.size18,
-                                        child: SlideableTransactions(
-                                          transactionName: GoogleSheetsApi
-                                              .currentTransactions[index][0],
-                                          ammount: GoogleSheetsApi
-                                              .currentTransactions[index][1],
-                                          expenseOrIncome: GoogleSheetsApi
-                                              .currentTransactions[index][2],
-                                        ),
-                                      ),
                                       SizedBox(
-                                        height: MySize.size10,
+                  height: MySize.size20,
                                       ),
+                                      Expanded(
+                    child: GoogleSheetsApi.loading == true
+                        ? const LoadingData()
+                        : GoogleSheetsApi.currentTransactions.isEmpty
+                    ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SizedBox(height: MySize.size35,),
+
+                          Text(
+                            'Your expense history is currently empty. Begin documenting your spending.',
+                            style: TextStyle(fontSize: MySize.size20,color: Colors.grey.shade600),textAlign: TextAlign.center,
+                          ),
+                          Text(
+                            'Click here to add new expenses',
+                            style: TextStyle(fontSize: MySize.size20,color: Colors.grey.shade800,fontWeight: FontWeight.w300),textAlign: TextAlign.center,
+                          ),
+
+                        ],
+                      ),
+                    )
+                    : ListView.builder(
+                            itemCount:
+                                GoogleSheetsApi.currentTransactions.length,
+                            itemBuilder: (context, index) {
+                              return Column(
+                                children: [
+                                  SlideAction(
+                                    onSubmit: () async {
+                                      bool isConfirmed = await showConfirmationDialog(context);
+
+                                      if (isConfirmed) {
+                                        // Perform the submission logic after deletion confirmation
+                                        bool isDeleted = await GoogleSheetsApi.deleteTransaction(index + 1);
+                                        setState(() {
+                                          CustomSnackBar.show(
+                                            message: isDeleted ? 'Transaction Deleted!' : 'Check Internet Connection and Try Again!',
+                                            isError: !isDeleted,
+                                          );
+                                        });
+                                      } else {
+                                        // Handle the case where the user cancelled the deletion or there was an error
+                                        // ...
+                                      }
+                                    },
+
+                                    submittedIcon: Icon(
+                                      Icons.delete_sweep_outlined,
+                                      color: Colors.red,
+                                      size: MySize.size35,
+                                    ),
+                                    reversed: false,
+                                    elevation: 1,
+                                    animationDuration: const Duration(milliseconds: 200),
+                                    sliderButtonIconPadding: MySize.size8,
+                                    sliderButtonYOffset: MySize.size8,
+                                    height: MySize.scaleFactorHeight * 65,
+                                    sliderRotate: true,
+                                    borderRadius: MySize.size20,
+                                    innerColor: Colors.grey.shade200,
+
+                                    outerColor: Colors.grey.shade100,
+
+                                    sliderButtonIcon: Icon(
+                                      Icons.attach_money_outlined,
+                                      color: GoogleSheetsApi
+                                                      .currentTransactions[
+                                                  index][2] ==
+                                              'expense'
+                                          ? Colors.red
+                                          : Colors.green,
+                                    ),
+                                    sliderButtonIconSize: MySize.size18,
+                                    child: SlideableTransactions(
+                                      transactionName: GoogleSheetsApi
+                                          .currentTransactions[index][0],
+                                      ammount: GoogleSheetsApi
+                                          .currentTransactions[index][1],
+                                      expenseOrIncome: GoogleSheetsApi
+                                          .currentTransactions[index][2],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: MySize.size10,
+                                  ),
+                                ],
+                              );
+                            }))
                                     ],
-                                  );
-                                }))
-                  ],
-                ),
-              ))),
+                                  ),
+                                )),
               AddExpenseButton(function: _newTransaction),
             ],
           ),

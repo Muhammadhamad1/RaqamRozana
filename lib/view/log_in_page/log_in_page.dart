@@ -50,12 +50,6 @@ class _LogInPageState extends State<LogInPage> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    whereToGo();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -215,44 +209,6 @@ class _LogInPageState extends State<LogInPage> {
   }
 
   // Combine shared preferences check and Google Sheets API method
-  void whereToGo() async {
-    final prefs = await SharedPreferences.getInstance();
-    var isLoggedIn = prefs.getBool('isLoggedIn');
-
-    if (isLoggedIn != null) {
-      if (isLoggedIn) {
-        CustomSnackBar.show(
-          message: 'User Already Logged In !',
-          isError: false, // Set to true for red color, false for green color
-        );
-
-        //REPLACE THE CURRENT PAGE WITH THE HOMEPAGE IF USER'S DATA IS ALREADY STORED IN THE SHARED PREFFERENCES
-        Get.off(() => const HomePage());
-      } else {
-        String email = _emailController.text.toLowerCase().trim();
-        String password = _passwordController.text.trim();
-
-        // Validate username
-        if (email.isEmpty) {
-          // Show an error message or handle validation as needed
-          return;
-        }
-
-        final sheetTitle = email;
-        final isAvailable = await GoogleSheetsApi.isSheetAvailable(sheetTitle);
-        if (isAvailable) {
-          await _saveLoginState(email, password);
-
-          //AFTER SAVING USER DATA NAVIGATE TO HOMEPAGE
-          Get.off(() => const HomePage());
-        } else {
-          return;
-        }
-      }
-    } else {
-      return;
-    }
-  }
 
   // Add this method for sign-in
   void _handleSignIn(BuildContext context) async {

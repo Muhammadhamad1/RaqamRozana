@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:gsheets/gsheets.dart';
 
 import '../../view/home_page.dart';
+import '../../widgets/snackbar.dart';
 
 class GoogleSheetsApi {
   // create credentials
@@ -55,30 +56,39 @@ class GoogleSheetsApi {
     loadTransactions();
   }
 
-  // LOAD THE DATA FROM WITHIN THE ROWS INTO THE CURRENT TRANSACTIONS LIST
+// LOAD THE DATA FROM WITHIN THE ROWS INTO THE CURRENT TRANSACTIONS LIST
   static Future loadTransactions() async {
     if (_worksheet == null) return;
 
-    for (int i = 1; i < numberOfTransactions; i++) {
-      final String transactionName =
-      await _worksheet!.values.value(column: 1, row: i + 1);
-      final String transactionAmount =
-      await _worksheet!.values.value(column: 2, row: i + 1);
-      final String transactionType =
-      await _worksheet!.values.value(column: 3, row: i + 1);
+    Set<List<String>> uniqueTransactions = <List<String>>{};
 
-      currentTransactions.add([
+    for (int i = 2; i <= numberOfTransactions; i++) {
+      final String transactionName =
+      await _worksheet!.values.value(column: 1, row: i);
+      final String transactionAmount =
+      await _worksheet!.values.value(column: 2, row: i);
+      final String transactionType =
+      await _worksheet!.values.value(column: 3, row: i);
+
+      List<String> currentTransaction = [
         transactionName,
         transactionAmount,
         transactionType,
-      ]);
+      ];
+
+      if (!uniqueTransactions.contains(currentTransaction)) {
+        uniqueTransactions.add(currentTransaction);
+        currentTransactions.add(currentTransaction);
+      }
     }
+
     if (kDebugMode) {
       print(currentTransactions);
     }
-    // this will stop the circular loading indicator
+
     loading = false;
   }
+
 
   // INSERT A NEW ROW INTO THE SHEET WHENEVER THE USER ADDS A NEW TRANSACTION
   static Future insert(String name, String amount, bool isIncome) async {
@@ -136,9 +146,24 @@ class GoogleSheetsApi {
       currentTransactions.removeAt(rowId - 1);
       numberOfTransactions--;
 
+
+      // Trigger a rebuild of the widget tree
+      homePageState?.setState(() {
+        CustomSnackBar.show(
+          message: 'Transaction Deleted!',
+          isError: false,
+        );
+      });
+
+
       // Return true indicating successful deletion
       return true;
     } catch (e) {
+
+      CustomSnackBar.show(
+        message: 'Check Internet Connection and Try Again!',
+        isError: true,
+      );
       // Handle any potential errors during the deletion process
       if (kDebugMode) {
         print("Error deleting transaction: $e");
